@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html ng-app="app">
+<head>
+    <title>Drive Current Hiring Challenge</title>
+</head>
+<link rel="stylesheet" type="text/css" href="http://fonts.googleapis.com/css?family=Roboto">
+<style type="text/css">
+    body {
+        font-family: 'Roboto' sans-serif;
+    }
+    .main-container {
+        max-width: 400px;
+        margin-right: auto;
+        margin-left: auto;
+    }
+    .text-center {
+        text-align: center;
+    }
+    canvas {
+        width: 100%;
+        margin-bottom: 1em;
+    }
+    label {
+        display: block;
+        margin-bottom: 1em;
+    }
+</style>
+<body hiring-challenge>
+    <div class="main-container">
+        <h1 class="text-center">Drive Current Hiring Challenge</h1>
+
+        <div class="text-center">
+            <canvas width="400" height="400"></canvas>
+        </div>
+
+        <label for="start_date">
+            <strong>Start:</strong> <input type="date" name="start_date">
+        </label>
+
+        <label for="end_date">
+            <strong>End:</strong> <input type="date" name="end_date">
+        </label>
+
+        <label for="metrics">
+            <strong>Metrics:</strong>
+            <input type="checkbox" name="metrics" value="unique_visitors">Unique Visitors
+            <input type="checkbox" name="metrics" value="page_views">Page Views
+            <input type="checkbox" name="metrics" value="visitrs">Visits
+        </label>
+    </div>
+    <script type="text/javascript" src="bower_components/chartjs/Chart.min.js"></script>
+    <script type="text/javascript" src="bower_components/angularjs/angular.min.js"></script>
+    <script type="text/javascript" src="assets/js/app.js"></script>
+
+</body>
+</html>

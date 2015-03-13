@@ -1,0 +1,5 @@
+Flask==0.10.1       # Flask is a light-weight web application server framework
+Flask-Cors==1.10.3  # Enables CORS support for Flask
+
+ipython==3.0.0      # A better REPL for python
+ipdb==0.8           # A better debugger for python
