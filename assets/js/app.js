@@ -94,7 +94,7 @@
           scope.$watch('app.chartData', function(data) {
             var context, chart;
 
-            if (!data) return;
+            if (!data || !data.datasets.length) return;
 
             context = element[0].getContext('2d');
             chart = new Chart(context).Line(data);
