@@ -7,10 +7,11 @@ from flask_cors import CORS
 from db import DataBase
 
 DATE_FORMAT = '%Y-%m-%d'
+JSON_DATE_FORMAT = '%Y-%m-%dT00:00:00Z'
 
 app = Flask(__name__)
-app.debug = True
-cors = CORS(app)
+app.debug = False
+cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 
 metric_id_to_name_map = {
@@ -21,7 +22,7 @@ metric_id_to_name_map = {
 
 
 def ensure_data_for_missing_dates(data, start_date, end_date):
-    days_delta = (end_date - start_date).days
+    days_delta = (end_date - start_date).days + 1
     data = dict(data)
     data = [
         data.get(start_date + timedelta(days=date), 0)
@@ -47,12 +48,12 @@ def api():
     end_date = datetime.strptime(request.args.get('end_date'), DATE_FORMAT).date()
     metrics = request.args.getlist('metrics')
 
-    delta_days = (end_date - start_date).days
+    delta_days = (end_date - start_date).days + 1
     db = DataBase()
 
     api_response = {
         'index': [
-            int((start_date + timedelta(day)).strftime('%s'))
+            (start_date + timedelta(day)).strftime(JSON_DATE_FORMAT)
             for day in xrange(delta_days)
         ],
         'series': {

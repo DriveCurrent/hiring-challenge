@@ -30,15 +30,15 @@
         <h1 class="text-center">Drive Current Hiring Challenge</h1>
 
         <div class="text-center">
-            <canvas width="400" height="400"></canvas>
+            <canvas chart width="400" height="400"></canvas>
         </div>
 
         <label for="start_date">
-            <strong>Start:</strong> <input type="date" name="start_date">
+            <strong>Start:</strong> <input type="date" name="start_date" ng-model="app.start_date" ng-change="app.updateData()">
         </label>
 
         <label for="end_date">
-            <strong>End:</strong> <input type="date" name="end_date">
+            <strong>End:</strong> <input type="date" name="end_date" ng-model="app.end_date" ng-change="app.updateData()">
         </label>
 
         <label for="metrics">
@@ -48,8 +48,8 @@
             <input type="checkbox" name="metrics" value="visitrs">Visits
         </label>
     </div>
-    <script type="text/javascript" src="bower_components/chartjs/Chart.min.js"></script>
-    <script type="text/javascript" src="bower_components/angularjs/angular.min.js"></script>
+    <script type="text/javascript" src="bower_components/chartjs/Chart.js"></script>
+    <script type="text/javascript" src="bower_components/angularjs/angular.js"></script>
     <script type="text/javascript" src="assets/js/app.js"></script>
 
 </body>

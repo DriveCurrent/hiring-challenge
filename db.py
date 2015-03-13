@@ -9,7 +9,7 @@ class DataBase(object):
         if metric_id not in self.valid_metrics:
             raise ValueError('Requested invalid column from database')
 
-        delta_days = (end_date - start_date).days
+        delta_days = (end_date - start_date).days + 1
         dates = sample([
             (start_date + timedelta(day))
             for day in xrange(delta_days)
