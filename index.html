@@ -8,21 +8,28 @@
     body {
         font-family: 'Roboto' sans-serif;
     }
+
     .main-container {
         max-width: 400px;
         margin-right: auto;
         margin-left: auto;
     }
+
     .text-center {
         text-align: center;
     }
+
     canvas {
         width: 100%;
         margin-bottom: 1em;
     }
+
     label {
-        display: block;
         margin-bottom: 1em;
+    }
+
+    .form-block {
+        display: block;
     }
 </style>
 <body hiring-challenge>
@@ -33,27 +40,41 @@
             <canvas chart width="400" height="400"></canvas>
         </div>
 
-        <label for="start_date">
+        <label class="form-block">
             <strong>Start:</strong>
-            <input type="date" name="start_date"
+            <input type="date"
                 ng-model="app.start_date"
                 ng-model-options="{timezone: 'UTC'}"
                 ng-change="app.updateData()">
         </label>
 
-        <label for="end_date">
+        <label class="form-block">
             <strong>End:</strong>
-            <input type="date" name="end_date"
+            <input type="date"
                 ng-model="app.end_date"
                 ng-model-options="{timezone: 'UTC'}"
                 ng-change="app.updateData()">
         </label>
 
-        <label for="metrics">
-            <strong>Metrics:</strong>
-            <input type="checkbox" name="metrics" value="unique_visitors">Unique Visitors
-            <input type="checkbox" name="metrics" value="page_views">Page Views
-            <input type="checkbox" name="metrics" value="visitrs">Visits
+        <strong>Metrics:</strong>
+
+        <label>
+            <input type="checkbox"
+                ng-model="app.metrics.unique_visitors"
+                ng-true-value="'unique_visitors'"
+                ng-change="app.updateData()">Unique Visitors
+        </label>
+        <label>
+            <input type="checkbox"
+                ng-model="app.metrics.page_views"
+                ng-true-value="'page_views'"
+                ng-change="app.updateData()">Page Views
+        </label>
+        <label>
+        <input type="checkbox"
+            ng-model="app.metrics.visits"
+            ng-true-value="'visits'"
+            ng-change="app.updateData()">Visits
         </label>
     </div>
     <script type="text/javascript" src="bower_components/chartjs/Chart.js"></script>

@@ -42,23 +42,34 @@
       };
     }
 
-    this.updateData = function updateData() {
+    this.updateData = (function updateData() {
       var params = {
         start_date: dateToJson(this.start_date),
         end_date: dateToJson(this.end_date),
-        metrics: 'visits'
+        metrics: undefined
       };
+
+      params.metrics = Object.keys(this.metrics).map(function(key) {
+        return this.metrics[key];
+      }, this).filter(function(value) {
+        return value;
+      });
 
       $http
         .get(apiEndpoint, {params: params})
         .then((function(response) {
           this.chartData = transformResponse(response.data);
         }).bind(this));
-    };
+    });
 
     // Fetch the initial data
     this.start_date = new Date('2015-01-01T00:00:00Z');
     this.end_date = new Date('2015-01-15T00:00:00Z');
+    this.metrics = {
+      unique_visitors: 'unique_visitors',
+      page_views: 'page_views',
+      visits: 'visits',
+    };
     this.updateData();
   }
 
@@ -85,7 +96,7 @@
 
             if (!data) return;
 
-            context = element[0].getContext('2d'),
+            context = element[0].getContext('2d');
             chart = new Chart(context).Line(data);
           });
         }
