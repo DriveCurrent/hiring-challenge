@@ -48,6 +48,7 @@ class DataBase(object):
             (start_date + timedelta(day))
             for day in xrange(delta_days)
         ]
+
         # Make a list by choosing a random number of dates from the list
         # simulating that the database will not always have data
         # for certain dates

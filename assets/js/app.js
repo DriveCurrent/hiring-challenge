@@ -82,16 +82,17 @@
         bindToController: true,
         controller: HiringChallengeController,
         controllerAs: 'app',
-        // scope: {}
       };
     })
     .directive('chart', function() {
       return {
         bindToController: true,
-        // scope: {},
+        scope: {
+          chart: '='
+        },
         link: function(scope, element) {
           // Get the context of the canvas element we want to select
-          scope.$watch('app.chartData', function(data) {
+          scope.$watch('chart', function(data) {
             var context, chart;
 
             if (!data || !data.datasets.length) return;
