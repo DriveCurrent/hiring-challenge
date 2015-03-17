@@ -64,7 +64,7 @@ Sample database response
  1. Install python requirements: `pip install -r requirements.txt`
  1. Install javascript requirements: `npm install`
  1. Install bower requirements: 'bower install'
- 1. Start the python server `python api/server.py`
+ 1. Start the python server `python server.py`
 
 
 ### General Notes

@@ -74,23 +74,7 @@
      * start_date, end_date, and metrics query parameters
      */
     this.updateData = (function updateData() {
-      var params = {
-        start_date: dateToJson(this.start_date),
-        end_date: dateToJson(this.end_date),
-        metrics: undefined
-      };
-
-      params.metrics = Object.keys(this.metrics).map(function(key) {
-        return this.metrics[key];
-      }, this).filter(function(value) {
-        return value;
-      });
-
-      $http
-        .get('/api', {params: params})
-        .then((function(response) {
-          this.chartData = transformResponse(response.data);
-        }).bind(this));
+      throw Error('TODO: updateData - Not Implemented.');
     });
 
     // Default Values
@@ -103,10 +87,10 @@
     };
 
     // Fetch the initial data
-    this.updateData();
+    throw Error('TODO: Fetch inital data');
   }
 
-  HiringChallengeController.$inject = ['$http', '$filter'];
+  HiringChallengeController.$inject = ['$filter'];
 
   angular
     .module('app', [])

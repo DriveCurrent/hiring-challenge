@@ -34,22 +34,7 @@ def ensure_data_for_missing_dates(data, start_date, end_date):
     -------
     [int, ...]
     """
-    # Get the difference between the start and end date in days
-    days_delta = (end_date - start_date).days + 1
-
-    # Convert the data values to dicts where the key is the date
-    # and the value is the data for the date
-    data = dict(data)
-
-    # Iterate over the expected dates
-    # use the value if present in the data dict
-    # otherwise default to zero
-    data = [
-        data.get(start_date + timedelta(days=date), 0)
-        for date in xrange(days_delta)
-    ]
-
-    return data
+    raise NotImplementedError('TODO: ensure_data_for_missing_dates')
 
 
 def transform_data_to_series(metric_id, data):
@@ -71,13 +56,7 @@ def transform_data_to_series(metric_id, data):
 
     }
     """
-    transformed_data = {
-        'name': metric_id_to_name_map[metric_id],
-        'total': sum(data),
-        'data': data
-    }
-
-    return transformed_data
+    raise NotImplementedError('TODO: transform_data_to_series')
 
 
 def get_index(start_date, end_date):
@@ -97,12 +76,7 @@ def get_index(start_date, end_date):
     -------
     [datetime.date, ...]
     """
-    delta_days = (end_date - start_date).days + 1
-    index = [
-        (start_date + timedelta(day)).strftime(JSON_DATE_FORMAT)
-        for day in xrange(delta_days)
-    ]
-    return index
+    raise NotImplementedError('TODO: get_index')
 
 
 @app.route('/')
