@@ -3,8 +3,6 @@
 
   Chart.defaults.Line.datasetFill = false;
 
-  var apiEndpoint = 'http://127.0.0.1:5000/api';
-
   function HiringChallengeController($http, $filter) {
     var colors = [
       '#f1595f',
@@ -12,18 +10,45 @@
       '#79c36a',
     ];
 
+    /**
+     * Transforms a timestamp into a JSON formatted date string
+     * @param  int date JS timestamp Ex: 1430438400
+     * @return String EX: '2015-01-01T00:00:00Z'
+     */
     function dateToJson(date) {
       return date.toJSON().match(/\d{4}-\d{2}-\d{2}/)[0];
     }
 
-    function jsonToDate(dateStr) {
+    /**
+     * Transforms a JSON formatted date string
+     * into a human readable string
+     *
+     * @param  String  datestr Ex: '2015-01-01T00:00:00Z'
+     * @return String EX: '1 Jan'
+     */
+    function jsonToDateStr(dateStr) {
       return $filter('date')(dateStr, 'd MMM', 'UTC');
     }
 
+    /**
+     * Helper function to process data from the api
+     * and transform it into a format that ChartJS can work with
+     *
+     * @param  data API response
+     *   {
+     *     index: [timestamp, ...],
+     *     series: {
+     *       metric_id: {
+     *         data: [int, ...]
+     *       }
+     *     },
+     *   }
+     * @return ChartJS config object
+     */
     function transformResponse(data) {
       var labels, datasets;
 
-      labels = data.index.map(jsonToDate);
+      labels = data.index.map(jsonToDateStr);
 
       datasets = Object.keys(data.series).map(function(key, i) {
         return {
@@ -42,6 +67,12 @@
       };
     }
 
+    /**
+     * Gets data from the api and publish it to this.chartData
+     *
+     * Request should be made to '/api' and include
+     * start_date, end_date, and metrics query parameters
+     */
     this.updateData = (function updateData() {
       var params = {
         start_date: dateToJson(this.start_date),
@@ -56,13 +87,13 @@
       });
 
       $http
-        .get(apiEndpoint, {params: params})
+        .get('/api', {params: params})
         .then((function(response) {
           this.chartData = transformResponse(response.data);
         }).bind(this));
     });
 
-    // Fetch the initial data
+    // Default Values
     this.start_date = new Date('2015-01-01T00:00:00Z');
     this.end_date = new Date('2015-01-15T00:00:00Z');
     this.metrics = {
@@ -70,6 +101,8 @@
       page_views: 'page_views',
       visits: 'visits',
     };
+
+    // Fetch the initial data
     this.updateData();
   }
 

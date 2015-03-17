@@ -81,6 +81,22 @@ def transform_data_to_series(metric_id, data):
 
 
 def get_index(start_date, end_date):
+    """
+    Get the index for the requested range
+    This is an array of dates from the start_date
+    to the end_date inclusive
+
+    This will be used as the x-axis labels for the chart
+
+    Params
+    ------
+    start_date: datetime.date
+    end_date: datetime.date
+
+    Returns
+    -------
+    [datetime.date, ...]
+    """
     delta_days = (end_date - start_date).days + 1
     index = [
         (start_date + timedelta(day)).strftime(JSON_DATE_FORMAT)
@@ -91,16 +107,31 @@ def get_index(start_date, end_date):
 
 @app.route('/')
 def root():
+    """
+    The root '/' route
+    Serves the index.html file
+
+    Static files are served automatically by flask
+    """
     return app.send_static_file('index.html')
 
 
 @app.route('/api')
 def api():
-    # Give guidance to sanitize the request parameters
-    # start < end data
-    # only valid metrics are accepted
-    # Ensure request parameters are santized and are sensible
-    # if not return the appropriate response (400) with a message
+    """
+    Api endpoint at '/api'
+
+    Fetches the data for the requested metrics and date range
+
+    Query Params
+    ------------
+    start_date: string  # 'YYYY-mm-dd'
+    end_date: string  #  'YYYY-mm-dd'
+    metrics:  [metric_id, ...]
+    """
+
+    # We may want to do some sanity checking on the query params
+    # What should be done in the event the params do not make sense?
     start_date = datetime.strptime(request.args.get('start_date'), DATE_FORMAT).date()
     end_date = datetime.strptime(request.args.get('end_date'), DATE_FORMAT).date()
     metrics = request.args.getlist('metrics')
@@ -122,6 +153,6 @@ def api():
 
 
 # Start the api if calling directly
-# $ python api.py
+# $ python server.py
 if __name__ == '__main__':
     app.run()
