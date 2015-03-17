@@ -96,6 +96,11 @@ def root():
 
 @app.route('/api')
 def api():
+    # Give guidance to sanitize the request parameters
+    # start < end data
+    # only valid metrics are accepted
+    # Ensure request parameters are santized and are sensible
+    # if not return the appropriate response (400) with a message
     start_date = datetime.strptime(request.args.get('start_date'), DATE_FORMAT).date()
     end_date = datetime.strptime(request.args.get('end_date'), DATE_FORMAT).date()
     metrics = request.args.getlist('metrics')

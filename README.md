@@ -6,7 +6,7 @@ Create an HTTP API endpoint that sends data in a specified format to the browser
 
 ### Tasks
 
- * Create an API endpoint 
+ * Create an API endpoint
  * Create an HTML page that fetches the data and displays it on a line graph
  * Write a README file with clear instructions on how to execute / test your code.
 
@@ -17,9 +17,9 @@ The endpoint should accept the following parameters:
  * start_date `"YYYY-mm-dd"`
  * end_date `"YYYY-mm-dd"`
  * metrics `[metric_id, metric_id, ...]`
- 
+
 The API should accept the following metric_ids:
- 
+
 ```
    metric_id          name
    ---------          -----
@@ -27,7 +27,7 @@ The API should accept the following metric_ids:
    page_views      => Page Views
    visits          => Visitors
  ```
- 
+
 The api should return JSON in this format
 ```javascript
  {
@@ -40,7 +40,7 @@ The api should return JSON in this format
              "data": [int]  # data points (int) for every day in the range
          },
      }
- } 
+ }
 ```
 
 Sample database response
@@ -56,6 +56,16 @@ Sample database response
     [datetime.date(2015, 1, 15), 4],
 ]
 ```
+
+### Getting started
+ 1. Download and Install Python (virtualenv and virtualenvwrapper recommended)
+ 1. Download and Install Node & npm
+ 1. In command line go to project directory
+ 1. Install python requirements: `pip install -r requirements.txt`
+ 1. Install javascript requirements: `npm install`
+ 1. Install bower requirements: 'bower install'
+ 1. Start the python server `python api/server.py`
+
 
 ### General Notes
 * If you get stuck, Google is your friend. Feel free to reach out to us for a hint as well.
