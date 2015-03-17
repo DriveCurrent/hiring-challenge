@@ -4,11 +4,13 @@
 
 Create an HTTP API endpoint that sends data in a specified format to the browser and display it graphically.
 
-### Tasks
-
- * Create an API endpoint
- * Create an HTML page that fetches the data and displays it on a line graph
- * Write a README file with clear instructions on how to execute / test your code.
+### Getting started
+ 1. Download and install python (virtualenv and virtualenvwrapper recommended)
+ 1. Download and install node
+ 1. In command line go to the project directory
+ 1. Install python requirements: `pip install -r requirements.txt`
+ 1. Install javascript requirements: `npm install && ./node_modules/.bin/bower install`
+ 1. Start the python server `python server.py`
 
 ### Specifications
 
@@ -59,20 +61,8 @@ Sample database response
 ]
 ```
 
-### Getting started
- 1. Download and Install Python (virtualenv and virtualenvwrapper recommended)
- 1. Download and Install Node & npm
- 1. In command line go to project directory
- 1. Install python requirements: `pip install -r requirements.txt`
- 1. Install javascript requirements: `npm install`
- 1. Install bower requirements: 'bower install'
- 1. Start the python server `python server.py`
-
-
 ### General Notes
 * If you get stuck, Google is your friend. Feel free to reach out to us for a hint as well.
-* We want to get a feel for how you think and develop.
-  * **Hint:** Commit early and often
 * We expect the project to take around four hours.
 * Keep a rough estimate of your time so that we can adapt this project in the future.
 
@@ -87,3 +77,6 @@ Sample database response
 * We've provided a helper function to generate data for the server response in Python
   * **Note:** If you want to use a language other than python make sure you use the sample database response to help with our grading of your submission
 
+### Submission Guidelines
+ 1. Zip up working directory
+ 1. Submit the project to adam@drivecurrent.com
