@@ -3,7 +3,7 @@
 
   Chart.defaults.Line.datasetFill = false;
 
-  var apiEndpoint = 'http://127.0.0.1:5000';
+  var apiEndpoint = 'http://127.0.0.1:5000/api';
 
   function HiringChallengeController($http, $filter) {
     var colors = [

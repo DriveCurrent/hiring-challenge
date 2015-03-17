@@ -9,7 +9,6 @@
   "author": "Adam Duren <adamduren@gmail.com>",
   "homepage": "https://www.drivecurrent.com",
   "dependencies": {
-    "bower": "^1.3.12",
-    "http-server": "^0.7.5"
+    "bower": "^1.3.12"
   }
 }

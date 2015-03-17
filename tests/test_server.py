@@ -8,7 +8,7 @@ class APITestCase(TestCase):
     def build_endpoint(self, start_date, end_date, metrics):
         metrics = '&metrics='.join(metrics)
 
-        url = '/?start_date={}&end_date={}&metrics={}'.format(
+        url = '/api?start_date={}&end_date={}&metrics={}'.format(
             start_date, end_date, metrics)
 
         print url

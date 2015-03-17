@@ -1,3 +1,0 @@
-python api\server.py &
-node_modules\.bin\http-server &
-sensible-browser http://127.0.0.1:8080

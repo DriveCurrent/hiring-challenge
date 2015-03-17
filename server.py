@@ -2,7 +2,6 @@ import json
 from datetime import datetime, timedelta
 
 from flask import Flask, request
-from flask_cors import CORS
 
 from db import DataBase
 
@@ -11,7 +10,6 @@ JSON_DATE_FORMAT = '%Y-%m-%dT00:00:00Z'  # Format for converting dates to JSON
 
 app = Flask(__name__)
 app.debug = True
-cors = CORS(app, resources={r"/*": {"origins": "*"}})
 
 
 # Map of metric_id's to friendly names
@@ -82,20 +80,30 @@ def transform_data_to_series(metric_id, data):
     return transformed_data
 
 
+def get_index(start_date, end_date):
+    delta_days = (end_date - start_date).days + 1
+    index = [
+        (start_date + timedelta(day)).strftime(JSON_DATE_FORMAT)
+        for day in xrange(delta_days)
+    ]
+    return index
+
+
 @app.route('/')
+def root():
+    return app.send_static_file('index.html')
+
+
+@app.route('/api')
 def api():
     start_date = datetime.strptime(request.args.get('start_date'), DATE_FORMAT).date()
     end_date = datetime.strptime(request.args.get('end_date'), DATE_FORMAT).date()
     metrics = request.args.getlist('metrics')
 
-    delta_days = (end_date - start_date).days + 1
     db = DataBase()
 
     response = {
-        'index': [
-            (start_date + timedelta(day)).strftime(JSON_DATE_FORMAT)
-            for day in xrange(delta_days)
-        ],
+        'index': get_index(start_date, end_date),
         'series': {}
     }
 
