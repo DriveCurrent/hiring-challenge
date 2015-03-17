@@ -12,6 +12,8 @@ Create an HTTP API endpoint that sends data in a specified format to the browser
 
 ### Specifications
 
+The graph should update automatically with new data when the input controls are changed
+
 The endpoint should accept the following parameters:
 
  * start_date `"YYYY-mm-dd"`
