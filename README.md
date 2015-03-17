@@ -12,6 +12,11 @@ Create an HTTP API endpoint that sends data in a specified format to the browser
  1. Install javascript requirements: `npm install && ./node_modules/.bin/bower install`
  1. Start the python server `python server.py`
 
+### Running the tests
+There are a few tests that test basic functionality of the API. The tests are not comprehensive and there are more cases to be considered. Please think about these additional scenarios when writing your code. It is not required but you can add more tests to the suite if you like.
+
+**To run the tests:** `python -m tests`
+
 ### Specifications
 
 The graph should update automatically with new data when the input controls are changed
