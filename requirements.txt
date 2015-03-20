@@ -1,5 +1,13 @@
-Flask==0.10.1       # Flask is a light-weight web application server framework
-
-ipython==3.0.0      # A better REPL for python
-ipdb==0.8           # A better debugger for python
-mock==1.0.1         # Allows mocking out unit under test dependencies
+Flask==0.10.1
+Jinja2==2.7.3
+MarkupSafe==0.23
+Werkzeug==0.10.1
+aniso8601==0.92
+argparse==1.2.1
+ipdb==0.8
+ipython==3.0.0
+itsdangerous==0.24
+mock==1.0.1
+pytz==2014.10
+six==1.9.0
+wsgiref==0.1.2

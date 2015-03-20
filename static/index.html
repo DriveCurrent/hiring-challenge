@@ -35,7 +35,6 @@
 <body hiring-challenge>
     <div class="main-container">
         <h1 class="text-center">Drive Current Hiring Challenge</h1>
-
         <div class="text-center">
             <canvas chart="app.chartData" width="400" height="400"></canvas>
         </div>
@@ -44,14 +43,16 @@
             <strong>Start:</strong>
             <input type="date"
                 ng-model="app.start_date"
-                ng-model-options="{timezone: 'UTC'}">
+                ng-model-options="{timezone: 'UTC'}"
+                ng-change="app.updateData()">
         </label>
 
         <label class="form-block">
             <strong>End:</strong>
             <input type="date"
                 ng-model="app.end_date"
-                ng-model-options="{timezone: 'UTC'}">
+                ng-model-options="{timezone: 'UTC'}"
+                ng-change="app.updateData()">
         </label>
 
         <strong>Metrics:</strong>
@@ -59,21 +60,29 @@
         <label>
             <input type="checkbox"
                 ng-model="app.metrics.unique_visitors"
-                ng-true-value="'unique_visitors'">Unique Visitors
+                ng-true-value="'unique_visitors'"
+                ng-false-value="false"
+                ng-change="app.updateData()"
+                >Unique Visitors
         </label>
         <label>
             <input type="checkbox"
                 ng-model="app.metrics.page_views"
-                ng-true-value="'page_views'">Page Views
+                ng-true-value="'page_views'"
+                ng-false-value="false"
+                ng-change="app.updateData()">Page Views
         </label>
         <label>
         <input type="checkbox"
             ng-model="app.metrics.visits"
-            ng-true-value="'visits'">Visits
+            ng-true-value="'visits'"
+            ng-false-value="false"
+            ng-change="app.updateData()">Visits
         </label>
     </div>
     <script type="text/javascript" src="static/bower_components/chartjs/Chart.js"></script>
     <script type="text/javascript" src="static/bower_components/angularjs/angular.js"></script>
+    <script src="//code.angularjs.org/1.3.15/angular-resource.js"></script>
     <script type="text/javascript" src="static/js/app.js"></script>
 
 </body>
