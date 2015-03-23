@@ -118,7 +118,7 @@
           // Update data on web page
           _this.dataGet.get({
 
-            start_date:dateToJson(_this.start_date),
+            start_date: dateToJson(_this.start_date),
             end_date: dateToJson(_this.end_date),
             metrics: _this.metrics_list
           },

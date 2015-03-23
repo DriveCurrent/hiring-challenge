@@ -187,7 +187,7 @@ def api():
         response['series'][metric_id] = data
 
     """Convert datetimes to ISO strings so they can be JSONified"""
-    response['index'] = [x.strftime(DATE_FORMAT) for x in response['index']]
+    response['index'] = [x.strftime(JSON_DATE_FORMAT) for x in response['index']]
 
     """Switched to jsonify to make the output cleaner"""
     return jsonify(response)

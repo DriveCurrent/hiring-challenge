@@ -45,7 +45,7 @@ class APITestCase(TestCase):
         self.assertEqual(self.response.status_code, 200)
 
     def test_index_should_contain_all_dates_in_range(self):
-        expected_index = ['2015-01-01', '2015-01-02']
+        expected_index = ['2015-01-01T00:00:00Z', '2015-01-02T00:00:00Z']
         self.assertEqual(self.response_data['index'], expected_index)
 
     def test_date_defaults(self):
