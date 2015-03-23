@@ -56,6 +56,7 @@
 
             datasets = Object.keys(data.series).map(function(key, i) {
                 return {
+                    label: key,
                     data: data.series[key].data,
                     strokeColor: colors[i],
                     pointColor: colors[i],
@@ -87,75 +88,93 @@
             visits: "visits",
         };
 
-        function buildChart (data) {
-              _this.chartData = {
-                  labels: data.labels,
-                  datasets: data.datasets
-                };
-        }
-
-        // Default metrics
-        this.metrics_list = [
-        _this.metrics.unique_visitors, 
-        _this.metrics.page_views, 
-        _this.metrics.visits
-        ];
-
-        this.updateData = (function updateData() {
-
-          _this.metrics_list = [];
-
-          // Check to see if metrics have been changed on the web page
-          for (var key in _this.metrics) {
-            if (_this.metrics[key] !== false && !(key in _this.metrics_list)) {
-              _this.metrics_list.push(_this.metrics[key]);
-            } else {
-              _this.metrics_list.slice(_this.metrics[key], 1);
-            } 
-          }
-          
-
-          // Update data on web page
-          _this.dataGet.get({
-
-            start_date: dateToJson(_this.start_date),
-            end_date: dateToJson(_this.end_date),
-            metrics: _this.metrics_list
-          },
-            function(successResponse) {
-              var data = transformResponse(successResponse);
-              buildChart(data);
-              console.log(successResponse);
-            },
-            function(failureResponse) {
-              console.log(failureResponse);
-            });
-        });
-
-
-
         // Pulls data from API with defaults
         this.dataGet = $resource('/api?start_date=:start_date&end_date=:end_date', {
-            start_date:  dateToJson(_this.start_date),
+            start_date: dateToJson(_this.start_date),
             end_date: dateToJson(_this.end_date),
-            metrics: _this.metrics_list
+            metrics: [
+                _this.metrics.unique_visitors,
+                _this.metrics.page_views,
+                _this.metrics.visits
+            ]
 
         });
+
+        // _this.tempData = [];
+
+        _this.tempData = {};
+
+        _this.updateMetrics = function updateMetrics(metric) {
+            var chart = window.chart;
+
+            for (var key in chart.datasets) {
+              if (chart.datasets[key].label === metric[0]) {
+                _this.tempData[key] = _.clone(chart.datasets[key]);
+                delete chart.datasets[key];
+                console.log(_this.tempData);
+              } else {
+                chart.datasets.push(_.clone(_this.tempData[key]));
+                delete _this.tempData[key];
+              }
+              
+            }
+
+            // Remove falsy values from chart data array to keep chart alive
+            chart.datasets = _.compact(chart.datasets);
+
+        };
+
 
         // Generate the initial dataset
         this.dataSet = this.dataGet.get({},
             function(successResponse) {
-                console.log(successResponse);
 
                 var data = transformResponse(successResponse);
 
-                buildChart(data);
+                // Build initial chart
+                _this.chartData = {
+                    labels: data.labels,
+                    datasets: data.datasets
+                };
 
             },
             function(errorResponse) {
                 console.log(errorResponse);
             }
         );
+
+        this.updateData = (function updateData() {
+
+            function checkMetrics(metrics) {
+                var used_metrics = [];
+                for (var key in _this.metrics) {
+                    if (_this.metrics[key] !== false) {
+                        used_metrics.push(_this.metrics[key]);
+                    }
+                }
+                return used_metrics;
+            }
+
+            // Update data on web page
+            _this.dataGet.get({
+                    start_date: dateToJson(_this.start_date),
+                    end_date: dateToJson(_this.end_date),
+                    metrics: checkMetrics(_this.metrics)
+                },
+                function(successResponse) {
+                    var data = transformResponse(successResponse);
+                    _this.chartData = {
+                        labels: data.labels,
+                        datasets: data.datasets
+                    };
+                    // Refresh graph data
+                    window.chart.destroy();
+                },
+                function(failureResponse) {
+                    console.log(failureResponse);
+                });
+        });
+
     }
 
     HiringChallengeController.$inject = ['$http', '$filter', '$resource'];
@@ -178,12 +197,20 @@
                 link: function(scope, element) {
                     // Get the context of the canvas element we want to select
                     scope.$watch('chart', function(data) {
-                        var context, chart;
 
+                        var context, chart;
                         if (!data || !data.datasets.length) return;
+
+                        for (var key in data.datasets) {
+                          if (data.datasets[key].visible === false) {
+                            data.datasets.pop(key);
+                          }
+                        }
 
                         context = element[0].getContext('2d');
                         chart = new Chart(context).Line(data);
+                        window.chart = chart;
+
                     });
                 }
             };
