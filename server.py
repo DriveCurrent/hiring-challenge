@@ -1,8 +1,7 @@
 import json
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, date
 
-from flask import Flask, request
-
+from flask import Flask, request, jsonify
 from db import DataBase
 
 DATE_FORMAT = '%Y-%m-%d'  # Format for parsing api date params
@@ -34,7 +33,44 @@ def ensure_data_for_missing_dates(data, start_date, end_date):
     -------
     [int, ...]
     """
-    raise NotImplementedError('TODO: ensure_data_for_missing_dates')
+    def gap_filler(start, end, target):
+        """Returns list of dates with 0 values"""
+        diff = (start - end).days
+        dates = [[start - timedelta(days=x), 0] for x in range(diff+1)]
+
+        """Dict comprehension to prevent duplicates"""
+        target_dict = {date: value for date, value in target}
+
+        for i in dates:
+            if i[0] not in target_dict:
+                target.append(i)
+            else:
+                pass
+
+    """Check front and rear of list to see if gaps exist"""
+    try:
+        first_date = data[0][0]
+        if start_date < first_date:
+            gap_filler(first_date, start_date, data)
+        else:
+            pass
+    except IndexError:
+        pass
+
+    try:
+        last_date = data[-1][0]
+        if last_date < end_date:
+            gap_filler(end_date, last_date, data)
+        else:
+            pass
+
+    except IndexError:
+        pass
+
+    """Extract values and return sorted list"""
+    data = [x[1] for x in sorted(data)]
+    return data
+
 
 
 def transform_data_to_series(metric_id, data):
@@ -56,7 +92,11 @@ def transform_data_to_series(metric_id, data):
 
     }
     """
-    raise NotImplementedError('TODO: transform_data_to_series')
+    return {
+        'name': metric_id_to_name_map[metric_id],
+        'total': sum(data),
+        'data': data
+    }
 
 
 def get_index(start_date, end_date):
@@ -76,7 +116,8 @@ def get_index(start_date, end_date):
     -------
     [datetime.date, ...]
     """
-    raise NotImplementedError('TODO: get_index')
+    diff = (start_date - end_date).days
+    return sorted([start_date + timedelta(days=x) for x in range(abs(diff)+1)])
 
 
 @app.route('/')
@@ -90,7 +131,7 @@ def root():
     return app.send_static_file('index.html')
 
 
-@app.route('/api')
+@app.route('/api', methods=['GET'])
 def api():
     """
     Api endpoint at '/api'
@@ -104,11 +145,33 @@ def api():
     metrics:  [metric_id, ...]
     """
 
+    """If nothing is in the URL, return empty JSON array"""
+    if request.args == {}:
+        today = date.today()
+        response = {}
+        response['index'] = [today.strftime(JSON_DATE_FORMAT),
+                             (today + timedelta(7)).strftime(JSON_DATE_FORMAT)]
+        response['series'] = []
+        return json.dumps(response)
+
     # We may want to do some sanity checking on the query params
     # What should be done in the event the params do not make sense?
-    start_date = datetime.strptime(request.args.get('start_date'), DATE_FORMAT).date()
-    end_date = datetime.strptime(request.args.get('end_date'), DATE_FORMAT).date()
+
+    """If start and end dates are missing, default to today and a week from now, respectively"""
+    if request.args.get('start_date') is not None:
+        start_date = datetime.strptime(request.args.get('start_date'), DATE_FORMAT).date()
+    else:
+        start_date = datetime.strptime(str(date.today()), DATE_FORMAT).date()
+    if request.args.get('end_date') is not None:
+        end_date = datetime.strptime(request.args.get('end_date'), DATE_FORMAT).date()
+    else:
+        end_date = datetime.strptime(str(date.today() + timedelta(7)), DATE_FORMAT).date()
+
     metrics = request.args.getlist('metrics')
+
+    for i in metrics:
+        if i == '':
+            metrics.pop(i)
 
     db = DataBase()
 
@@ -123,7 +186,11 @@ def api():
         data = transform_data_to_series(metric_id, data)
         response['series'][metric_id] = data
 
-    return json.dumps(response, indent=4)
+    """Convert datetimes to ISO strings so they can be JSONified"""
+    response['index'] = [x.strftime(JSON_DATE_FORMAT) for x in response['index']]
+
+    """Switched to jsonify to make the output cleaner"""
+    return jsonify(response)
 
 
 # Start the api if calling directly
